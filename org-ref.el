@@ -53,6 +53,11 @@
   :type 'file
   :group 'org-ref)
 
+(defcustom org-ref-open-notes-functions '(org-ref-open-bibtex-notes)
+  "Functions used to find the notes."
+  :type 'hook
+  :group 'org-ref)
+
 (defcustom org-ref-default-bibliography
   nil
   "List of bibtex files to search for.
@@ -1623,7 +1628,7 @@ Contributed by https://github.com/autosquid."
         (insert-file-contents bibfile)
         (bibtex-set-dialect (parsebib-find-bibtex-dialect) t)
         (bibtex-search-entry key)
-        (org-ref-open-bibtex-notes)))))
+        (run-hook-with-args-until-success 'org-ref-open-notes-functions)))))
 
 
 (defun org-ref-citation-at-point ()
